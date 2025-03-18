@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { LayoutAtropos } from "./components/LayoutAtropos";
 import * as THREE from "three";
+import corazon from "./assets/corazon.webp";
 
 function App() {
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
@@ -41,7 +42,7 @@ function App() {
     // Cargar la textura de un corazón rojo
     const textureLoader = new THREE.TextureLoader();
     const heartTexture = textureLoader.load(
-      'public/corazon.webp' // Aquí debes poner la URL de la imagen del corazón rojo
+      corazon // Aquí debes poner la URL de la imagen del corazón rojo
     );
 
     // Crear partículas con forma de corazón
