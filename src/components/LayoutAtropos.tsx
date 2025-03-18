@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import Atropos from 'atropos/react';
-import 'atropos/css';
+import 'atropos/atropos.css';
 
 export const LayoutAtropos = (
   { scale = undefined, rotateClass = undefined, innerClass = undefined, styles = undefined, children } 
