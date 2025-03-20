@@ -3,10 +3,13 @@ import { motion } from "framer-motion";
 import { LayoutAtropos } from "./components/LayoutAtropos";
 import * as THREE from "three";
 import corazon from "./assets/corazon.webp";
+import { Tetris } from "./components/Tetris";
+
+export type modal = "modal" | "tetris" | null;
 
 function App() {
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
-  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible, setModalVisible] = useState<modal>(null);
   const [counter, setCounter] = useState(0);
 
   const moveNoButton = () => {
@@ -97,7 +100,7 @@ function App() {
           </p>
           <div className="flex gap-4">
             <button
-              onClick={() => setModalVisible(true)}
+              onClick={() => setModalVisible("modal")}
               className="bg-green-500 text-white px-6 py-2 rounded-lg text-xl hover:bg-green-600 cursor-pointer"
             >
               Sí 💖
@@ -116,20 +119,24 @@ function App() {
       </div>
       <div
         className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${
-          modalVisible ? "" : "hidden"
+          modalVisible === "modal" ? "" : "hidden"
         }`}
       >
         <LayoutAtropos innerClass="bg-white p-8 rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4">¡Gracias por decir que sí! 💖</h2>
           <p className="mb-4">Eres la mejor, Vera. Estoy muy feliz de que seas mi novia.</p>
           <button
-            onClick={() => setModalVisible(false)}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+            onClick={() => setModalVisible(null)}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 cursor-pointer"
           >
             Cerrar
           </button>
+          <button onClick={() => setModalVisible("tetris")} className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 ml-4 cursor-pointer">
+            Jugar al tetris
+          </button>
         </LayoutAtropos>
       </div>
+      <Tetris visible={modalVisible} setVisible={setModalVisible} />
     </>
   );
 }
