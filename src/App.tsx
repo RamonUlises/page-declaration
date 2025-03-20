@@ -4,8 +4,9 @@ import { LayoutAtropos } from "./components/LayoutAtropos";
 import * as THREE from "three";
 import corazon from "./assets/corazon.webp";
 import { Tetris } from "./components/Tetris";
+import { TresRaya } from "./components/TresRaya";
 
-export type modal = "modal" | "tetris" | null;
+export type modal = "modal" | "tetris" | "tresRaya" | null;
 
 function App() {
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
@@ -134,9 +135,13 @@ function App() {
           <button onClick={() => setModalVisible("tetris")} className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 ml-4 cursor-pointer">
             Jugar al tetris
           </button>
+          <button onClick={() => setModalVisible("tresRaya")} className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 ml-4 cursor-pointer">
+            Jugar al tres en raya
+          </button>
         </LayoutAtropos>
       </div>
       <Tetris visible={modalVisible} setVisible={setModalVisible} />
+      <TresRaya visible={modalVisible} setVisible={setModalVisible} />
     </>
   );
 }
