@@ -441,7 +441,7 @@ export function Solitario({ visible, setVisible }: {
         <button className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-md" onClick={() => setVisible(null)}>
           Salir
         </button>
-        <div className="flex justify-between">
+        <div className="flex justify-between w-full max-w-[900px] mx-auto">
           <div className="flex gap-4">
             {/* Stock */}
             <div
@@ -514,7 +514,7 @@ export function Solitario({ visible, setVisible }: {
         </div>
 
         {/* Tableaus */}
-        <div className="flex gap-4 mt-6">
+        <div className="flex gap-4 mt-6 w-full max-w-[900px] mx-auto">
           {tableaus.map((pile, tableauIndex) => (
             <div
               key={tableauIndex}
@@ -565,7 +565,7 @@ export function Solitario({ visible, setVisible }: {
           ))}
         </div>
 
-        <div className="flex justify-between items-center mt-4">
+        <div className="flex justify-between items-center mt-4 w-full max-w-[900px] mx-auto">
           <div className="text-white">Moves: {moves}</div>
           <button className="bg-yellow-500 text-white px-4 py-2 rounded-md" onClick={startNewGame}>New Game</button>
         </div>
