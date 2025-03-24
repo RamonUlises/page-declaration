@@ -5,8 +5,9 @@ import * as THREE from "three";
 import corazon from "./assets/corazon.webp";
 import { Tetris } from "./components/Tetris";
 import { TresRaya } from "./components/TresRaya";
+import { Solitario } from "./components/Solitario";
 
-export type modal = "modal" | "tetris" | "tresRaya" | null;
+export type modal = "modal" | "tetris" | "tresRaya" | "Solitario" | null;
 
 function App() {
   const [noPosition, setNoPosition] = useState({ x: 0, y: 0 });
@@ -91,7 +92,7 @@ function App() {
 
   return (
     <>
-      <div className="z-10 flex flex-col items-center justify-center h-screen absolute w-full">
+      <div className={`${modalVisible === null ? "flex" : "hidden"} z-10 flex-col items-center justify-center h-screen absolute w-full`}>
         <div className="bg-purple-600 p-4 rounded-md">
           <h1 className="text-3xl font-bold mb-8 text-white">
             Vera, ¿puedo ser tu novio? ❤️
@@ -138,10 +139,14 @@ function App() {
           <button onClick={() => setModalVisible("tresRaya")} className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 ml-4 cursor-pointer">
             Jugar al tres en raya
           </button>
+          <button onClick={() => setModalVisible("Solitario")} className="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 ml-4 cursor-pointer">
+            Jugar solitario
+          </button>
         </LayoutAtropos>
       </div>
       <Tetris visible={modalVisible} setVisible={setModalVisible} />
       <TresRaya visible={modalVisible} setVisible={setModalVisible} />
+      <Solitario visible={modalVisible} setVisible={setModalVisible} />
     </>
   );
 }
