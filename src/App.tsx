@@ -1,11 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { LayoutAtropos } from "./components/LayoutAtropos";
-import * as THREE from "three";
-import corazon from "./assets/corazon.webp";
 import { Tetris } from "./components/Tetris";
 import { TresRaya } from "./components/TresRaya";
 import { Solitario } from "./components/Solitario";
+
+import p5 from "p5";
+import { ReactP5Wrapper } from "react-p5-wrapper";
+
+interface Particle {
+  pos: p5.Vector;
+  vel: p5.Vector;
+  acc: p5.Vector;
+  size: number;
+}
 
 export type modal = "modal" | "tetris" | "tresRaya" | "Solitario" | null;
 
@@ -21,81 +29,69 @@ function App() {
     setCounter(counter + 1);
   };
 
-  const sceneRef = useRef<THREE.Scene | null>(null);
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const particles: Particle[] = [];
+  const mouse = { x: 0, y: 0 };
 
-  useEffect(() => {
-    // Crear escena, cámara y renderizador
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 5;
-
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    sceneRef.current = scene;
-    cameraRef.current = camera;
-    rendererRef.current = renderer;
-
-    // Cargar la textura de un corazón rojo
-    const textureLoader = new THREE.TextureLoader();
-    const heartTexture = textureLoader.load(
-      corazon // Aquí debes poner la URL de la imagen del corazón rojo
-    );
-
-    // Crear partículas con forma de corazón
-    const particleCount = 1000;
-    const geometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 10; // Posición X
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // Posición Y
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // Posición Z
-    }
-
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    const material = new THREE.PointsMaterial({
-      size: 0.5, // Tamaño de la partícula
-      map: heartTexture, // Usar la textura de corazón
-      transparent: true, // Hacer transparente para ver el corazón
-      depthWrite: false, // Asegura que las partículas estén por detrás
-    });
-
-    const particles = new THREE.Points(geometry, material);
-    scene.add(particles);
-
-    // Animar las partículas
-    const animate = () => {
-      requestAnimationFrame(animate);
-      particles.rotation.x += 0.01;
-      particles.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    // Limpieza al desmontar el componente
-    return () => {
-      if (rendererRef.current && rendererRef.current.domElement) {
-        document.body.removeChild(rendererRef.current.domElement);
+  const sketch = (p: p5) => {
+    p.setup = () => {
+      p.createCanvas(window.innerWidth, window.innerHeight);
+      const canvas = p.select('canvas');
+      if (canvas) {
+        canvas.style('position', 'absolute');
+        canvas.style('top', '0');
+        canvas.style('left', '0');
+        canvas.style('z-index', '-1');
+      }
+      
+      for (let i = 0; i < 2000; i++) {
+        particles.push({
+          pos: p.createVector(p.random(p.width), p.random(p.height)),
+          vel: p.createVector(p.random(-1, 1), p.random(-1, 1)),
+          acc: p.createVector(0, 0),
+          size: p.random(3, 3),
+        });
       }
     };
-  }, []);
+
+    p.draw = () => {
+      p.background(20);
+      particles.forEach((particle) => {
+        const force = p.createVector(mouse.x - particle.pos.x, mouse.y - particle.pos.y);
+        const distance = force.mag();
+        if (distance < 100) {
+          force.setMag(-0.5);
+        } else {
+          force.setMag(0);
+        }
+        particle.acc = force;
+        particle.vel.add(particle.acc);
+        particle.vel.limit(2);
+        particle.pos.add(particle.vel);
+
+        if (particle.pos.x > p.width) particle.pos.x = 0;
+        if (particle.pos.x < 0) particle.pos.x = p.width;
+        if (particle.pos.y > p.height) particle.pos.y = 0;
+        if (particle.pos.y < 0) particle.pos.y = p.height;
+
+        p.fill(255);
+        p.noStroke();
+        p.ellipse(particle.pos.x, particle.pos.y, particle.size);
+      });
+    };
+
+    p.mouseMoved = () => {
+      mouse.x = p.mouseX;
+      mouse.y = p.mouseY;
+    };
+  };
 
   return (
     <>
       <div className={`${modalVisible === null ? "flex" : "hidden"} z-10 flex-col items-center justify-center h-screen absolute w-full`}>
+        <ReactP5Wrapper sketch={sketch} />
         <div className="bg-purple-600 p-4 rounded-md">
           <h1 className="text-3xl font-bold mb-8 text-white">
-            Vera, ¿puedo ser tu novio? ❤️
+            Veronica, ¿puedo ser tu novio? ❤️
           </h1>
           <p className="text-xl text-white mb-4">
             {counter > 5 && `¡Acepta no seas asi! :(`}
