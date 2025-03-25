@@ -129,6 +129,9 @@ function App() {
           modalVisible === "modal" ? "" : "hidden"
         }`}
       >
+        <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+          <i className="fa-solid fa-heart animate-beatee"></i>
+        </div>
         <LayoutAtropos innerClass="bg-white p-8 rounded-lg shadow-lg max-w-[720px]">
           <h2 className="text-2xl font-bold mb-4">
             ¡Gracias por decir que sí! 💖
@@ -174,7 +177,7 @@ function App() {
       <TresRaya visible={modalVisible} setVisible={setModalVisible} />
       <Solitario visible={modalVisible} setVisible={setModalVisible} />
       {
-        modalVisible === "corazon" &&  <Corazon />
+        modalVisible === "corazon" &&  <Corazon setVisible={setModalVisible} />
       }
     </>
   );

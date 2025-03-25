@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import type p5 from "p5"
 import { ReactP5Wrapper } from "react-p5-wrapper"
+import { modal } from "../App"
 
 type Particle = {
   x: number
@@ -21,7 +22,7 @@ type SketchProps = {
   height: number
 }
 
-export default function Corazon() {
+export default function Corazon({ setVisible }: { setVisible: (visible: modal) => void }) {
   const [dimensions, setDimensions] = useState<SketchProps>({
     width: 800,
     height: 600,
@@ -173,6 +174,12 @@ export default function Corazon() {
   return (
     <div className="flex items-center justify-center w-full h-screen bg-black">
       <ReactP5Wrapper sketch={sketch} />
+      <button
+        className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-md cursor-pointer"
+        onClick={() => setVisible(null)}
+      >
+        Volver
+      </button>
     </div>
   )
 }

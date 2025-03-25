@@ -1,5 +1,35 @@
 @import "tailwindcss";
 
-body{
+body {
   overflow: hidden;
+}
+
+i {
+  color: #000;
+  font-size: 600px;
+  text-shadow: 0 0 15px red, 0 0 80px red, 0 0 90px red;
+}
+@keyframes beatee {
+  0% {
+    scale: 1;
+  }
+  20% {
+    scale: 1.4;
+  }
+  40% {
+    scale: 1.6;
+  }
+  60% {
+    scale: 1.4;
+  }
+  80% {
+    scale: 1.2;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+@theme{
+  --animate-beatee: beatee 2s infinite linear;
 }
